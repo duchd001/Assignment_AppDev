@@ -2,9 +2,6 @@
 using Assignment_AppDev.Utils;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -59,6 +56,7 @@ namespace Assignment_AppDev.Controllers
             return View();
         }
         [HttpGet]
+        //CreateTrainerAccount
         public ActionResult CreateTrainerAccount()
         {
             return View();
@@ -85,7 +83,7 @@ namespace Assignment_AppDev.Controllers
             }
             return View(model);
         }
-
+        //CreateStaffAccount
         [HttpGet]
         public ActionResult CreateStaffAccount()
         {
@@ -106,13 +104,14 @@ namespace Assignment_AppDev.Controllers
                 if (result.Succeeded)
                 {
                     //Add to training staff role
-                    await UserManager.AddToRoleAsync(staffInf.Id, Role.Trainer);
+                    await UserManager.AddToRoleAsync(staffInf.Id, Role.TrainingStaff);
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
             }
             return View(model);
         }
+        //Show Trainer Info
         [HttpGet]
         public ActionResult ShowTrainersInfo()
         {
@@ -121,8 +120,9 @@ namespace Assignment_AppDev.Controllers
             var users = _context.Users
               .Where(m => m.Roles.Any(r => r.RoleId.Equals(role.Id)))
               .ToList();
-            return View("ShowInfo", users);
+            return View("ShowTrainersInfo", users);
         }
+        //Show Staff Info
         [HttpGet]
         public ActionResult ShowStaffsInfo()
         {
@@ -131,44 +131,125 @@ namespace Assignment_AppDev.Controllers
             var users = _context.Users
               .Where(m => m.Roles.Any(r => r.RoleId.Equals(role.Id)))
               .ToList();
-            return View("ShowInfo", users);
+            return View("ShowStaffsInfo", users);
         }
 
-        [HttpGet]
-        public ActionResult Edit(string id)
-        {
+        //[HttpGet]
+        //public ActionResult EditTrainer(string id)
+        //{
 
-            var editUser = _context.Users.Find(id);
-            if (editUser == null)
+        //    var editUser = _context.Users.Find(id);
+        //    if (editUser == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(editUser);
+        //}
+
+        //[HttpPost]
+        //public ActionResult EditTrainer(ApplicationUser user)
+        //{
+        //    var userInDb = _context.Users.Find(user.Id);
+
+        //    if (userInDb == null)
+        //    {
+        //        return View(user);
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+
+        //        userInDb.Email = user.Email;
+        //        _context.Users.AddOrUpdate(userInDb);
+        //        _context.SaveChanges();
+
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(user);
+
+        //}
+        [HttpGet]
+        //[Authorize(Roles = "Admin")]
+        public ActionResult EditTrainer(string id)
+        {
+            // Find and assign the Id value in the Users table to userInDb
+            var userInDb = _context.Users.SingleOrDefault(u => u.Id == id);
+            if (userInDb == null)
             {
                 return HttpNotFound();
             }
-            return View(editUser);
-        }
 
+            return View(userInDb);
+        }
         [HttpPost]
-        public ActionResult Edit(ApplicationUser user)
+        //[Authorize(Roles = "Admin")]
+        public ActionResult EditTrainer(ApplicationUser user)
         {
-            var userInDb = _context.Users.Find(user.Id);
+            // Check the value of Id
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var usernameExist = _context.Users.Any(u => u.UserName.Contains(user.UserName));
+            //  var EmailIsExist = _context.Users.Any(u => u.Email.Contains(user.Email));
+            if (usernameExist)
+            {
+                ModelState.AddModelError("UserName", "Username existed");
+                return View();
+            }
+            var userInDb = _context.Users.SingleOrDefault(u => u.Id == user.Id);
 
             if (userInDb == null)
             {
-                return View(user);
+                return HttpNotFound();
             }
+            userInDb.UserName = user.UserName;
+            userInDb.Email = user.Email;
+            _context.SaveChanges();
 
-            if (ModelState.IsValid)
-            {
-
-                userInDb.Email = user.Email;
-                _context.Users.AddOrUpdate(userInDb);
-                _context.SaveChanges();
-
-                return RedirectToAction("Index");
-            }
-            return View(user);
-
+            return RedirectToAction("ShowTrainersInfo");
         }
-        public ActionResult Delete(string id)
+
+        public ActionResult EditStaff(string id)
+        {
+            // Find and assign the Id value in the Users table to userInDb
+            var userInDb = _context.Users.SingleOrDefault(u => u.Id == id);
+            if (userInDb == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(userInDb);
+        }
+        [HttpPost]
+        //[Authorize(Roles = "Admin")]
+        public ActionResult EditStaff(ApplicationUser user)
+        {
+            // Check the value of Id
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var usernameExist = _context.Users.Any(u => u.UserName.Contains(user.UserName));
+            //  var EmailIsExist = _context.Users.Any(u => u.Email.Contains(user.Email));
+            if (usernameExist)
+            {
+                ModelState.AddModelError("UserName", "Username existed");
+                return View();
+            }
+            var userInDb = _context.Users.SingleOrDefault(u => u.Id == user.Id);
+
+            if (userInDb == null)
+            {
+                return HttpNotFound();
+            }
+            userInDb.UserName = user.UserName;
+            userInDb.Email = user.Email;
+            _context.SaveChanges();
+
+            return RedirectToAction("ShowStaffsInfo");
+        }
+        public ActionResult DeleteTrainer(string id)
         {
             var userInDb = _context.Users.SingleOrDefault(p => p.Id == id);
 
@@ -178,9 +259,21 @@ namespace Assignment_AppDev.Controllers
             }
             _context.Users.Remove(userInDb);
             _context.SaveChanges();
-
-            return RedirectToAction("Index");
+            return RedirectToAction("ShowTrainersInfo");
         }
+        public ActionResult DeleteStaff(string id)
+        {
+            var userInDb = _context.Users.SingleOrDefault(p => p.Id == id);
+
+            if (userInDb == null)
+            {
+                return HttpNotFound();
+            }
+            _context.Users.Remove(userInDb);
+            _context.SaveChanges();
+            return RedirectToAction("ShowStaffsInfo");
+        }
+
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)

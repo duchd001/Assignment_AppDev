@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "ShowTrainersInfo";
+}
+
+<h2>ShowTrainersInfo</h2>
+<div class="form-group">
+    @Html.ActionLink("Back to Home", "Index", "Home", null, new { @class = "btn btn-primary" })
+</div>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Username</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+        <tr>
+            <td>
+                @user.Email
+            </td>
+            <td>
+                @user.UserName
+            </td>
+            <td>@Html.ActionLink("Edit Trainer", "EditTrainer", new { id = user.Id }, new { @class = "btn btn-success" })</td>
+            <td>
+                @Html.ActionLink("Delete", "DeleteTrainer", null, new { id = user.Id },
+                new { @class = "btn btn-danger", onClick = "return confirm('Are you sure!?')" })
+            </td>
+        </tr>
+        }
+
+    </tbody>
+</table>
+
