@@ -9,14 +9,17 @@ namespace Assignment_AppDev.Models
 {
     public class Trainer
     {
-		public int ID { get; set; }
+		public int ID { get; set; }		
 
 		[DisplayName("Trainer ID")]
 		[Required]
 		public string TrainerID { get; set; }
 
 		[DisplayName("Trainer Name")]
+		public int Age { get; set; }	
 		public string Name { get; set; }
 		public int Phone { get; set; }
+		public string Address { get; set; }
+
 	}
 }
