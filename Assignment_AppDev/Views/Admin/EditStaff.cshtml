@@ -4,6 +4,10 @@
 }
 
 <h2>Edit Staff</h2>
+<div class="form-group">
+    @Html.ActionLink("Back", "ShowStaffsInfo", "Admin", null, new { @class = "btn btn-primary" })
+</div>
+
 @using (Html.BeginForm("EditStaff", "Admin", FormMethod.Post))
 {
     @Html.HiddenFor(u => u.Id)

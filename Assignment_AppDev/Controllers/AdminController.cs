@@ -133,41 +133,6 @@ namespace Assignment_AppDev.Controllers
               .ToList();
             return View("ShowStaffsInfo", users);
         }
-
-        //[HttpGet]
-        //public ActionResult EditTrainer(string id)
-        //{
-
-        //    var editUser = _context.Users.Find(id);
-        //    if (editUser == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(editUser);
-        //}
-
-        //[HttpPost]
-        //public ActionResult EditTrainer(ApplicationUser user)
-        //{
-        //    var userInDb = _context.Users.Find(user.Id);
-
-        //    if (userInDb == null)
-        //    {
-        //        return View(user);
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-
-        //        userInDb.Email = user.Email;
-        //        _context.Users.AddOrUpdate(userInDb);
-        //        _context.SaveChanges();
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(user);
-
-        //}
         [HttpGet]
         //[Authorize(Roles = "Admin")]
         public ActionResult EditTrainer(string id)
@@ -191,7 +156,6 @@ namespace Assignment_AppDev.Controllers
                 return View();
             }
             var usernameExist = _context.Users.Any(u => u.UserName.Contains(user.UserName));
-            //  var EmailIsExist = _context.Users.Any(u => u.Email.Contains(user.Email));
             if (usernameExist)
             {
                 ModelState.AddModelError("UserName", "Username existed");
