@@ -190,10 +190,20 @@
     <Compile Include="Migrations\202112161450010_UpdateDbTrainer.designer.cs">
       <DependentUpon>202112161450010_UpdateDbTrainer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112171610111_UpdateDb.cs" />
+    <Compile Include="Migrations\202112171610111_UpdateDb.designer.cs">
+      <DependentUpon>202112171610111_UpdateDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112181237147_AddCategoryandCourse.cs" />
+    <Compile Include="Migrations\202112181237147_AddCategoryandCourse.designer.cs">
+      <DependentUpon>202112181237147_AddCategoryandCourse.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Course.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Trainee.cs" />
     <Compile Include="Models\Trainer.cs" />
@@ -266,12 +276,11 @@
     <Content Include="Views\Admin\ShowTrainersInfo.cshtml" />
     <Content Include="Views\Admin\EditTrainer.cshtml" />
     <Content Include="Views\Admin\EditStaff.cshtml" />
-    <Content Include="Views\StaffViewModel\Edit.cshtml" />
-    <Content Include="Views\StaffViewModel\Index.cshtml" />
+    <Content Include="Views\StaffsViewModels\Edit.cshtml" />
+    <Content Include="Views\StaffsViewModels\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\StaffsViewModel\" />
     <Folder Include="Views\Trainees\" />
     <Folder Include="Views\Trainers\" />
   </ItemGroup>
@@ -297,6 +306,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202112161450010_UpdateDbTrainer.resx">
       <DependentUpon>202112161450010_UpdateDbTrainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112171610111_UpdateDb.resx">
+      <DependentUpon>202112171610111_UpdateDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112181237147_AddCategoryandCourse.resx">
+      <DependentUpon>202112181237147_AddCategoryandCourse.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
