@@ -1,0 +1,29 @@
+﻿@model Assignment_AppDev.ViewModels.CourseCategoryViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+@Html.ActionLink("Back", "Index")
+@using (Html.BeginForm())
+{
+	@Html.HiddenFor(m => m.Course.ID)
+
+	<div class="form-group">
+		@Html.LabelFor(m => m.Course.Name)
+		@Html.EditorFor(m => m.Course.Name, new { htmlAttributes = new { @class = "form-control" } })
+		@Html.ValidationMessageFor(c => c.Course.Name, "", new { @class = "text-danger" })
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(m => m.Course.Description)
+		@Html.EditorFor(m => m.Course.Description, new { htmlAttributes = new { @class = "form-control" } })
+		@Html.ValidationMessageFor(m => m.Course.Description, "", new { @class = "text-danger" })
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(m => m.Course.Category.Name)
+		@Html.DropDownListFor(m => m.Course.CategoryID, new SelectList(Model.Categories, "ID", "Name"), "", new { @class = "form-control" })
+	</div>
+	<button type="submit" class="btn btn-success">Edit</button>
+}

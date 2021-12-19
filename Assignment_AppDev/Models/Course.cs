@@ -20,6 +20,7 @@ namespace Assignment_AppDev.Models
 			public string Description { get; set; }
 
 			[Required]
+
 			public int CategoryID { get; set; }
 			public Category Category { get; set; }
 		}

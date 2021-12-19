@@ -137,7 +137,7 @@ namespace Assignment_AppDev.Controllers
         //[Authorize(Roles = "Admin")]
         public ActionResult EditTrainer(string id)
         {
-            // Find and assign the Id value in the Users table to userInDb
+            // Find and assign Id value in the Trainer table to userInDb
             var userInDb = _context.Users.SingleOrDefault(u => u.Id == id);
             if (userInDb == null)
             {
@@ -176,7 +176,7 @@ namespace Assignment_AppDev.Controllers
 
         public ActionResult EditStaff(string id)
         {
-            // Find and assign the Id value in the Users table to userInDb
+            // Find and assign Id value in the Staff table to userInDb
             var userInDb = _context.Users.SingleOrDefault(u => u.Id == id);
             if (userInDb == null)
             {
