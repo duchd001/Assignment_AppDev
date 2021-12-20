@@ -1,0 +1,12 @@
+﻿@model Assignment_AppDev.Models.Trainee
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+@Html.ActionLink("Back", "Index", "Home")
+<div class="panel panel-default">
+    <div class="panel-heading">Name: @Model.Name</div>
+    <div class="panel-body">Email: @Model.Email</div>
+</div>
+

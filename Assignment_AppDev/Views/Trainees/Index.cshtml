@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Assignment_AppDev.Models.Trainee>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Trainee</h2>
+@Html.ActionLink("Back","Index","Home")
+@if (Request.IsAuthenticated && User.IsInRole("TrainingStaff"))
+{
+    <h3>Search Trainee</h3>
+    using (@Html.BeginForm("Index", "Trainees", FormMethod.Get))
+    {
+        <p>
+            Search by name: @Html.TextBox("SearchString")
+            <input type="submit" value="Search" />
+        </p>
+    }
+    @Html.ActionLink("Add Trainee Profile", "Create")
+
+
+		<table class="table">
+			<tr>
+
+
+				<th>UserName</th>
+				<th>Email</th>
+				<th>FullName</th>
+				<th>Edit</th>
+				<th>Delete</th>
+
+			</tr>
+				@foreach (var trainee in Model)
+				{
+		<tr>
+			<th>@trainee.Trainees.UserName</th>
+			<th>@trainee.Email</th>
+			<th>@trainee.Name</th>
+			<th>@Html.ActionLink("Edit", "Edit", new { id = trainee.Id })</th>
+			<th>@Html.ActionLink("Delete", "Delete", new { id = trainee.Id })</th>
+		</tr>
+				}
+		</table>
+}
+@if (User.IsInRole("Trainee"))
+            {
+	<table class="table">
+			<tr>
+				<th>Email</th>
+				<th>FullName</th>
+				<th>Edit</th>
+				<th>Delete</th>
+
+			</tr>
+				@foreach (var trainee in Model)
+				{
+		<tr>
+			<th>@trainee.Email</th>
+			<th>@trainee.Name</th>
+			<th>@Html.ActionLink("Edit", "Edit", new { id = trainee.Id })</th>
+		</tr>
+				}
+		</table>
+            }
+
+
+

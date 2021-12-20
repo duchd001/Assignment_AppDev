@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Assignment_AppDev.Models.Trainer>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Trainer</h2>
+@Html.ActionLink("Back", "Index", "Home")
+@if (Request.IsAuthenticated && User.IsInRole("TrainingStaff"))
+{
+    <h3>Search Trainee</h3>
+    using (@Html.BeginForm("Index", "Trainers", FormMethod.Get))
+    {
+        <p>
+            Search by name: @Html.TextBox("SearchString")
+            <input type="submit" value="Search" />
+        </p>
+    }
+    @Html.ActionLink("Add Trainer Profile", "Create")
+
+
+    <table class="table">
+        <tr>
+
+
+            <th>UserName</th>
+            <th>Email</th>
+            <th>FullName</th>
+            <th>Age</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Edit</th>
+            <th>Delete</th>
+
+        </tr>
+        @foreach (var trainer in Model)
+        {
+            <tr>
+                <th>@trainer.Trainers.UserName</th>
+                <th>@trainer.Email</th>
+                <th>@trainer.Name</th>
+                <th>@trainer.Age</th>
+                <th>@trainer.Phone</th>
+                <th>@trainer.Address</th>
+                <th>@Html.ActionLink("Edit", "Edit", new { id = trainer.ID })</th>
+                <th>@Html.ActionLink("Delete", "Delete", new { id = trainer.ID })</th>
+            </tr>
+}
+    </table>}
+@if (User.IsInRole("Trainer"))
+{
+    <table class="table">
+        <tr>
+            <th>Email</th>
+            <th>FullName</th>
+            <th>Age</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Edit</th>
+            <th>Delete</th>
+
+        </tr>
+        @foreach (var trainer in Model)
+        {
+            <tr>
+                <th>@trainer.Email</th>
+                <th>@trainer.Name</th>
+                <th>@trainer.Age</th>
+                <th>@trainer.Phone</th>
+                <th>@trainer.Address</th>
+                <th>@Html.ActionLink("Edit", "Edit", new { id = trainer.ID })</th>
+            </tr>
+}
+    </table>
+}
+
+
+

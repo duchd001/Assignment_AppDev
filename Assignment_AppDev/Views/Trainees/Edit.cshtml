@@ -1,0 +1,36 @@
+﻿@model Assignment_AppDev.Models.Trainee
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit Trainee</h2>
+@Html.ActionLink("Back", "Index")
+@Html.ValidationSummary(false, "", new { @class = "text-danger" })
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+	@Html.HiddenFor(p => p.Id)
+
+	<div class="form-group">
+		@Html.LabelFor(t => t.Email)
+		@Html.EditorFor(t => t.Email, new { htmlAttributes = new { @class = "form-control" } })
+		@Html.ValidationMessageFor(t => t.Email)
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(t => t.Name)
+		@Html.EditorFor(t => t.Name, new { htmlAttributes = new { @class = "form-control" } })
+		@Html.ValidationMessageFor(t => t.Name)
+	</div>
+		<div class="form-group">
+		@Html.LabelFor(p => p.TraineeID)
+		@Html.EditorFor(p => p.TraineeID, new { htmlAttributes = new { @class = "form-control" } })
+		@Html.ValidationMessageFor(p => p.TraineeID, "", new { @class = "text-danger" })
+	</div>	
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+}

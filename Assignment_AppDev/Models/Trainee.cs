@@ -17,6 +17,7 @@ namespace Assignment_AppDev.Models
         [DisplayName("Trainee Name")]
         public string Name { get; set; }
         public string Email { get; set; }
+        public ApplicationUser Trainees { get;set; }
 
     }
 }
