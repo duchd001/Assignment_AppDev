@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Admin</h2>
+<div class="row">
+    @if (User.Identity.IsAuthenticated)
+    {
+        if (User.IsInRole(Assignment_AppDev.Utils.Role.Admin))
+        {
+            <div class="col-md-4">
+                <h2>Admin</h2>
+                <p>
+                    @Html.ActionLink("Create Trainer account", "CreateTrainerAccount", "Admin", null, new { @class = "btn btn-primary" })
+                </p>
+                <p>
+                    @Html.ActionLink("Create Staff account", "CreateStaffAccount", "Admin", null, new { @class = "btn btn-info" })
+                </p>
+                <p>
+                    @Html.ActionLink("Show Staff info", "ShowStaffsInfo", "Admin", null, new { @class = "btn btn-success" })
+                </p>
+                <p>
+                    @Html.ActionLink("Show Trainer info", "ShowTrainersInfo", "Admin", null, new { @class = "btn btn-success" })
+                </p>
+            </div>
+        }
+    }
+</div>
