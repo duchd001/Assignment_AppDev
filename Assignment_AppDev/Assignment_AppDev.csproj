@@ -170,6 +170,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AssignTraineeToCoursesController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\Role.cs" />
+    <Compile Include="ViewModels\AssignTraineeToCourseViewModel.cs" />
     <Compile Include="ViewModels\CourseCategoryViewModel.cs" />
     <Compile Include="ViewModels\StaffViewModel.cs" />
     <Compile Include="ViewModels\TraineeViewModel.cs" />
@@ -294,10 +296,11 @@
     <Content Include="Views\Categories\Index.cshtml" />
     <Content Include="Views\Categories\Create.cshtml" />
     <Content Include="Views\Categories\Edit.cshtml" />
+    <Content Include="Views\AssignTraineeToCourses\Create.cshtml" />
+    <Content Include="Views\AssignTraineeToCourses\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\AssignTraineeToCourses\" />
     <Folder Include="Views\AssignTrainerToCourses\" />
     <Folder Include="Views\Trainees\" />
     <Folder Include="Views\Trainers\" />
