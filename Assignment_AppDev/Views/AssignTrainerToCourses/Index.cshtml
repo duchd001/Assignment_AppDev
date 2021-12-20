@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Assignment_AppDev.Models.AssignTrainerToCourse>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Trainer Topic</h2>
+
+
+
+@if (User.IsInRole("TrainingStaff"))
+{
+    @Html.ActionLink("Assign Trainer to Course", "Create")
+
+
+    <table class="table">
+        <tr>
+            <th>Email</th>
+            <th>UserName</th>
+            <th>Course </th>
+            <th>Delete</th>
+
+
+        </tr>
+        @foreach (var assign in Model)
+        {
+            <tr>
+                <th>@assign.Trainer.Email</th>
+                <th>@assign.Trainer.UserName</th>
+                <th>@assign.Course.Name</th>
+                <th>@Html.ActionLink("Delete", "Delete", new { id = assign.ID })</th>
+
+            </tr>
+        }
+    </table>
+}
+@if (User.IsInRole("Trainer"))
+{
+    <table class="table">
+        <tr>
+            <th>Course</th>
+        </tr>
+
+        @foreach (var assign in Model)
+        {
+            <tr>
+                <td>@assign.Course.Name</td>
+            </tr>
+        }
+    </table>
+}
+
+@Html.ActionLink("Back to home", "Index", "Home")
