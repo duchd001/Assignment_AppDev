@@ -21,13 +21,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
-                    {
-                        <li>@Html.ActionLink("Create Staff Account", "CreateStaffAccount", "Admin")</li>
-                        <li>@Html.ActionLink("Create Trainer Account", "CreateTrainerAccount", "Admin")</li>
-                        <li>@Html.ActionLink("Show Staff Information", "ShowStaffsInfo", "Admin")</li>
-                        <li>@Html.ActionLink("Show Trainer Information", "ShowTrainersInfo", "Admin")</li>
-                    }
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
