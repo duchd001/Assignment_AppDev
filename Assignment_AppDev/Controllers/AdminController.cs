@@ -70,7 +70,8 @@ namespace Assignment_AppDev.Controllers
                 var trainerInf = new ApplicationUser
                 {
                     UserName = model.Email,
-                    Email = model.Email
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber
                 };
                 var result = await UserManager.CreateAsync(trainerInf, model.Password);
                 if (result.Succeeded)
@@ -98,7 +99,8 @@ namespace Assignment_AppDev.Controllers
                 var staffInf = new ApplicationUser
                 {
                     UserName = model.Email,
-                    Email = model.Email
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber
                 };
                 var result = await UserManager.CreateAsync(staffInf, model.Password);
                 if (result.Succeeded)
