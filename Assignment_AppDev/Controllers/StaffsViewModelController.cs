@@ -30,7 +30,7 @@ namespace Assignment_AppDev.Controllers
 				RoleName = "Trainee",
 				UserID = user.Id
 			}).ToList();
-            var staff = new StaffViewModel { Trainee = traineeUserVM };
+            var staff = new StaffViewModel { Trainee = traineeUserVM, Trainer = traineeUserVM };
 			return View(staff);
 		}
 
