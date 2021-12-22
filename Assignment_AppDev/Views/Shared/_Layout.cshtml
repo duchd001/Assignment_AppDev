@@ -23,29 +23,10 @@
                 <ul class="nav navbar-nav">
                     @if (Request.IsAuthenticated && User.IsInRole("Admin"))
                     {
-                        <li>@Html.ActionLink("Role", "Index", "Roles")</li>
-                        <li>@Html.ActionLink("Manage User", "Index", "Admins")</li>
-                    }
-                    @if (Request.IsAuthenticated && User.IsInRole("TrainingStaff"))
-                    {
-                        <li>@Html.ActionLink("Category", "Index", "Categories")</li>
-                        <li>@Html.ActionLink("Course", "Index", "Courses")</li>
-                        <li>@Html.ActionLink("Trainee Course", "Index", "AssignTraineeToCourses")</li>
-                        <li>@Html.ActionLink("Trainer Course", "Index", "AssignTrainerToCourses")</li>
-                        <li>@Html.ActionLink("Trainee", "Index", "Trainee")</li>
-                        <li>@Html.ActionLink("Trainer", "Index", "Trainer")</li>
-                        <li>@Html.ActionLink("View User", "Index", "StaffViewModels")</li>
-                    }
-                    @if (Request.IsAuthenticated && User.IsInRole("Trainer"))
-                    {
-                        <li>@Html.ActionLink("Trainer", "Index", "TrainerUsers")</li>
-                        <li>@Html.ActionLink("Trainer Course", "Index", "AssignTrainertoCourse")</li>
-
-                    }
-                    @if (Request.IsAuthenticated && User.IsInRole("Trainee"))
-                    {
-                        <li>@Html.ActionLink("Trainee", "Index", "TraineeUsers")</li>
-                        <li>@Html.ActionLink("Trainee Course", "Index", "AssignTraineetoCourses")</li>
+                        <li>@Html.ActionLink("Create Staff Account", "CreateStaffAccount", "Admin")</li>
+                        <li>@Html.ActionLink("Create Trainer Account", "CreateTrainerAccount", "Admin")</li>
+                        <li>@Html.ActionLink("Show Staff Information", "ShowStaffsInfo", "Admin")</li>
+                        <li>@Html.ActionLink("Show Trainer Information", "ShowTrainersInfo", "Admin")</li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")

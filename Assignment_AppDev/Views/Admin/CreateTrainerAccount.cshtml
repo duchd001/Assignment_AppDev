@@ -3,7 +3,7 @@
     ViewBag.Title = "CreateTrainerAccount";
 }
 
-<h2>Create Account</h2>
+<h2>CreateTrainerAccount</h2>
 <p class="text-center">Create new Trainer's Account</p>
 @using (Html.BeginForm("CreateTrainerAccount", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
@@ -15,6 +15,18 @@
         @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
