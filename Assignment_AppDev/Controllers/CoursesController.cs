@@ -1,4 +1,6 @@
 ﻿using Assignment_AppDev.Models;
+using Assignment_AppDev.Utils;
+using Assignment_AppDev.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -9,7 +11,6 @@ using System.Web.Mvc;
 
 namespace Assignment_AppDev.Controllers
 {
-	[Authorize(Roles = "TrainingStaff")]
 	public class CoursesController : Controller
     {
         private ApplicationDbContext _context;
@@ -17,89 +18,111 @@ namespace Assignment_AppDev.Controllers
         {
             _context = new ApplicationDbContext();
         }
-        // GET: Courses
-        public ActionResult Index(string searchString)
+		// GET: Courses
+		[HttpGet]
+		public ActionResult Index(string searchString)
         {
-			var course = _context.Courses.ToList();
+			var courses = _context.Courses.Include(c => c.Category);
 
 			if (!String.IsNullOrEmpty(searchString))
 			{
-				course = course.FindAll(s => s.Name.Contains(searchString));
+						courses = courses.Where(
+						s => s.Name.Contains(searchString) ||
+						s.Category.Name.Contains(searchString));
 			}
 
-			return View(course);
+			return View(courses);
 		}
 		[HttpGet]
 		public ActionResult Create()
 		{
-			return View();
+			var viewModel = new CourseCategoryViewModel
+			{
+				Categories = _context.Categories.ToList(),
+				Course = new Course(),
+			};
+			return View(viewModel);
 		}
 
 		[HttpPost]
-		public ActionResult Create(Category category)
+		public ActionResult Create(CourseCategoryViewModel coursecate)
 		{
-			if (!ModelState.IsValid)
+			if (ModelState.IsValid)
 			{
-				return RedirectToAction("Create");
+				var check = _context.Courses.Include(c => c.Category)
+					.Where(c => c.Name == coursecate.Course.Name && c.CategoryID == coursecate.Course.CategoryID);
+				//GET NameCOurse and Category ID from VM
+				if (check.Count() > 0) //list ID comparison, if count == 0. jump to else
+				{
+					ModelState.AddModelError("", "Course Already Exists.");
+				}
+				else
+				{
+					_context.Courses.Add(coursecate.Course);
+					_context.SaveChanges();
+					return RedirectToAction("Index");
+				}
 			}
-			var check = _context.Categories.Any(
-				c => c.Name.Contains(category.Name));
-			if (check)
+			var courseVM = new CourseCategoryViewModel()
 			{
-				ModelState.AddModelError("", "Category Already Exists.");
-				return View("Create");
-			}
-			_context.Categories.Add(category);
-			_context.SaveChanges();
-			return RedirectToAction("Index");
+				Categories = _context.Categories.ToList(),
+				Course = coursecate.Course,
+			};
+			return View(courseVM);
 		}
 		[HttpGet]
 		public ActionResult Edit(int id)
 		{
-			if (id == null)
-			{
-				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-			}
-			Category category = _context.Categories.Find(id);
-			if (category == null)
+			var courseInDb = _context.Courses.SingleOrDefault(c => c.ID == id);
+			if (courseInDb == null)
 			{
 				return HttpNotFound();
 			}
-			return View();
+			var viewModel = new CourseCategoryViewModel
+			{
+				Course = courseInDb,
+				Categories = _context.Categories.ToList()
+			};
+			return View(viewModel);
 		}
 		[HttpPost]
-		public ActionResult Edit(Category category)
+		public ActionResult Edit(CourseCategoryViewModel edit)
 		{
-
 			if (ModelState.IsValid)
 			{
-				_context.Entry(category).State = EntityState.Modified;
-				_context.SaveChanges();
-				return RedirectToAction("Index");
-			}
-			var check = _context.Categories.Any(
-				c => c.Name.Contains(category.Name));
+				var check = _context.Courses.Include(c => c.Category).Where(c => c.Name == edit.Course.Name && c.CategoryID == edit.Course.CategoryID);
 
-			if (check)
-			{
-				ModelState.AddModelError("", "Category Already Exists.");
-				return View("Index");
+				if (check.Count() > 0)
+				{
+					ModelState.AddModelError("", "Course Already Exists.");
+				}
+				else
+				{
+					var courseInDb = _context.Courses.Find(edit.Course.ID);
+					courseInDb.Name = edit.Course.Name;
+					courseInDb.Description = edit.Course.Description;
+					_context.SaveChanges();
+					return RedirectToAction("Index");
+				}
 			}
-			category.Name = category.Name;
-			category.Description = category.Description;
-			return View(category);
+
+			var courseVM = new CourseCategoryViewModel()
+			{
+				Categories = _context.Categories.ToList(),
+				Course = edit.Course,
+			};
+			return View(courseVM);
 		}
 		[HttpGet]
 		public ActionResult Delete(int id)
 		{
-			var categoryInDb = _context.Categories.SingleOrDefault(c => c.ID == id);
+			var courseInDb = _context.Courses.SingleOrDefault(c => c.ID == id);
 
-			if (categoryInDb == null)
+			if (courseInDb == null)
 			{
 				return HttpNotFound();
 			}
-
-			_context.Categories.Remove(categoryInDb);
+			_context.Courses.Remove(courseInDb);
 			_context.SaveChanges();
 			return RedirectToAction("Index");
 		}

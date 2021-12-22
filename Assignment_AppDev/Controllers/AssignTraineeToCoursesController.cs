@@ -24,7 +24,7 @@ namespace Assignment_AppDev.Controllers
         // GET: AssignTraineeToCourses
         public ActionResult Index()
         {
-            if (User.IsInRole("Staff"))
+            if (User.IsInRole("TrainingStaff"))
             {
                 var viewAssign = _context.AssignTraineeToCourses.Include(a => a.Course).Include(a => a.Trainee).ToList();
                 return View(viewAssign);
@@ -51,7 +51,7 @@ namespace Assignment_AppDev.Controllers
             {
                 Courses = courses,
                 Trainees = traineeUser,
-                AssignTraineetoCourse = new AssignTraineeToCourse()
+                AssignTraineeToCourse = new AssignTraineeToCourse()
             };
             return View(viewModel);
         }
@@ -66,7 +66,7 @@ namespace Assignment_AppDev.Controllers
             if (ModelState.IsValid)
             {
                 var checkTraineeAndCourseExist = _context.AssignTraineeToCourses.Include(t => t.Course).Include(t => t.Trainee)
-                    .Where(t => t.Course.ID == assign.AssignTraineetoCourse.CourseID && t.Trainee.Id == assign.AssignTraineetoCourse.TraineeID);
+                    .Where(t => t.Course.ID == assign.AssignTraineeToCourse.CourseID && t.Trainee.Id == assign.AssignTraineeToCourse.TraineeID);
                 //GET CourseID and TraineeID from the Course and Trainee tables in the ViewModel
 
                 if (checkTraineeAndCourseExist.Count() > 0) //list ID comparison, if count == 0. jump to else
@@ -75,7 +75,7 @@ namespace Assignment_AppDev.Controllers
                 }
                 else
                 {
-                    _context.AssignTraineeToCourses.Add(assign.AssignTraineetoCourse);
+                    _context.AssignTraineeToCourses.Add(assign.AssignTraineeToCourse);
                     _context.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -84,8 +84,9 @@ namespace Assignment_AppDev.Controllers
             {
                 Courses = course,
                 Trainees = traineeUser,
-                AssignTraineetoCourse = assign.AssignTraineetoCourse
+                AssignTraineeToCourse = assign.AssignTraineeToCourse
             };
+            _context.SaveChanges();
             return View(traineecourseVM);
         }
         [HttpGet]

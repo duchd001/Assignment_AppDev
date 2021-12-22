@@ -239,6 +239,36 @@ namespace Assignment_AppDev.Controllers
             _context.SaveChanges();
             return RedirectToAction("ShowStaffsInfo");
         }
+        [HttpGet]
+        [Authorize (Roles = Role.TrainingStaff)]
+        public ActionResult CreateTraineeAccount()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> CreateTraineeAccountAsync(RegisterViewModel model)
+        {
+            //Borrow from AccountController
+            if (ModelState.IsValid)
+            {
+                var traineeInf = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber
+                };
+                var result = await UserManager.CreateAsync(traineeInf, model.Password);
+                if (result.Succeeded)
+                {
+                    //Add to trainee role
+                    await UserManager.AddToRoleAsync(traineeInf.Id, Role.Trainee);
+                    return RedirectToAction("Index", "Home");
+                }
+                AddErrors(result);
+            }
+            return View(model);
+
+        }
 
         private void AddErrors(IdentityResult result)
         {

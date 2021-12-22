@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-namespace ASM_AppDevDD.Controllers
+namespace Assingment_AppDev.Controllers
 {
     public class TraineesController : Controller
     {

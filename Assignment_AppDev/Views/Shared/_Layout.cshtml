@@ -28,11 +28,23 @@
                         <li>@Html.ActionLink("Show Staff Information", "ShowStaffsInfo", "Admin")</li>
                         <li>@Html.ActionLink("Show Trainer Information", "ShowTrainersInfo", "Admin")</li>
                     }
+                    @if (Request.IsAuthenticated && User.IsInRole("TrainingStaff"))
+                    {
+                        <li>@Html.ActionLink("Category", "Index", "Categories")</li>
+                        <li>@Html.ActionLink("Course", "Index", "Courses")</li>
+                        <li>@Html.ActionLink("Create Trainee Account","CreateTraineeAccount","TrainingStaff")</li>
+                        <li>@Html.ActionLink("Trainee Course", "Index", "AssignTraineeToCourses")</li>
+                        <li>@Html.ActionLink("Trainer Course", "Index", "AssignTrainerToCourses")</li>
+                        <li>@Html.ActionLink("Trainee", "Index", "Trainees")</li>
+                        <li>@Html.ActionLink("Trainer", "Index", "Trainers")</li>
+                        <li>@Html.ActionLink("View User", "Index", "StaffViewModels")</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
