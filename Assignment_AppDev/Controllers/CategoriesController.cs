@@ -9,7 +9,9 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace Assignment_AppDev.Controllers
-{ 
+
+{
+	[Authorize(Roles = "TrainingStaff")]
 	public class CategoriesController : Controller
 	{
 		// GET: Categories
@@ -33,7 +35,6 @@ namespace Assignment_AppDev.Controllers
 			return View(category);
 		}
 		[HttpGet]
-		
 		public ActionResult Create()
 		{
 			return View();
@@ -63,7 +64,6 @@ namespace Assignment_AppDev.Controllers
 			return RedirectToAction("Index");
 		}
 		[HttpGet]
-		
 		public ActionResult Edit(int? id)
 		{
 			if (id == null)
@@ -100,7 +100,6 @@ namespace Assignment_AppDev.Controllers
 			return View(category);
 		}
 		[HttpGet]
-		
 		public ActionResult Delete(int id)
 		{
 			var categoryInDb = _context.Categories.SingleOrDefault(c => c.ID == id);

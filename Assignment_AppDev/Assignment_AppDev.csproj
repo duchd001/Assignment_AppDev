@@ -214,6 +214,14 @@
     <Compile Include="Migrations\202112220437244_UpdateDb2.designer.cs">
       <DependentUpon>202112220437244_UpdateDb2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112221629533_UpdateDb02.cs" />
+    <Compile Include="Migrations\202112221629533_UpdateDb02.designer.cs">
+      <DependentUpon>202112221629533_UpdateDb02.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112230524014_UpdateDb3.cs" />
+    <Compile Include="Migrations\202112230524014_UpdateDb3.designer.cs">
+      <DependentUpon>202112230524014_UpdateDb3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -308,7 +316,7 @@
     <Content Include="Views\Categories\Edit.cshtml" />
     <Content Include="Views\AssignTraineeToCourses\Create.cshtml" />
     <Content Include="Views\AssignTraineeToCourses\Index.cshtml" />
-    <Content Include="Views\AssignTrainerToCourses\Edit.cshtml" />
+    <Content Include="Views\AssignTrainerToCourses\Create.cshtml" />
     <Content Include="Views\AssignTrainerToCourses\Index.cshtml" />
     <Content Include="Views\Trainees\Index.cshtml" />
     <Content Include="Views\Trainees\Details.cshtml" />
@@ -318,7 +326,7 @@
     <Content Include="Views\Trainers\Details.cshtml" />
     <Content Include="Views\Trainers\Create.cshtml" />
     <Content Include="Views\Trainers\Edit.cshtml" />
-    <Content Include="Views\Admin\CreateTraineeAccount.cshtml" />
+    <Content Include="Views\StaffsViewModels\CreateTraineeAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -360,6 +368,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202112220437244_UpdateDb2.resx">
       <DependentUpon>202112220437244_UpdateDb2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112221629533_UpdateDb02.resx">
+      <DependentUpon>202112221629533_UpdateDb02.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112230524014_UpdateDb3.resx">
+      <DependentUpon>202112230524014_UpdateDb3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

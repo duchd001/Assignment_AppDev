@@ -37,7 +37,7 @@ namespace Assignment_AppDev.Controllers
 
 		//GET: Trainer and Course
 		[HttpGet]
-		[Authorize(Roles = Role.TrainingStaff)]
+		[Authorize(Roles = "TrainingStaff")]
 		public ActionResult Create()
 		{
 			var trainerInDb = (from te in _context.Roles where te.Name.Contains("Trainer") select te).FirstOrDefault();
@@ -57,7 +57,7 @@ namespace Assignment_AppDev.Controllers
 
 
 		[HttpPost]
-		[Authorize(Roles = Role.TrainingStaff)]
+		[Authorize(Roles = "TrainingStaff")]
 		public ActionResult Create(AssignTrainerToCourseViewModel assign)
 		{
 			var trainerInDb = (from te in _context.Roles where te.Name.Contains("Trainer") select te).FirstOrDefault();
@@ -92,7 +92,7 @@ namespace Assignment_AppDev.Controllers
 
 
 		[HttpGet]
-		[Authorize(Roles = Role.TrainingStaff)]
+		[Authorize(Roles = "TrainingStaff")]
 		public ActionResult Delete(int id)
 		{
 			var assignInDb = _context.AssignTrainerToCourses.SingleOrDefault(a => a.ID == id);

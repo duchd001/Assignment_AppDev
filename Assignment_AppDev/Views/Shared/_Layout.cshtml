@@ -32,12 +32,12 @@
                     {
                         <li>@Html.ActionLink("Category", "Index", "Categories")</li>
                         <li>@Html.ActionLink("Course", "Index", "Courses")</li>
-                        <li>@Html.ActionLink("Create Trainee Account","CreateTraineeAccount","TrainingStaff")</li>
+                        <li>@Html.ActionLink("Create Trainee Account", "CreateTraineeAccount", "StaffsViewModels")</li>
                         <li>@Html.ActionLink("Trainee Course", "Index", "AssignTraineeToCourses")</li>
                         <li>@Html.ActionLink("Trainer Course", "Index", "AssignTrainerToCourses")</li>
                         <li>@Html.ActionLink("Trainee", "Index", "Trainees")</li>
                         <li>@Html.ActionLink("Trainer", "Index", "Trainers")</li>
-                        <li>@Html.ActionLink("View User", "Index", "StaffViewModels")</li>
+                        <li>@Html.ActionLink("View User", "Index", "StaffsViewModels")</li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")

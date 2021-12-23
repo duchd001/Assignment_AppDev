@@ -4,8 +4,8 @@
 }
 
 <h2>Create Trainee Account</h2>
-<p class="text-center">Create new Trainer's Account</p>
-@using (Html.BeginForm("CreateTraineeAccount", "TrainingStaff", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+<p class="text-center">Create new Trainee's Account</p>
+@using (Html.BeginForm("CreateTraineeAccount", "StaffsViewModels", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <hr />

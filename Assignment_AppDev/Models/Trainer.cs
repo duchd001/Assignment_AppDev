@@ -13,7 +13,7 @@ namespace Assignment_AppDev.Models
 
 		[DisplayName("Trainer ID")]
 		[Required]
-		public int TrainerID { get; set; }
+		public string TrainerID { get; set; }
 
 		[DisplayName("Trainer Name")]
 		public int Age { get; set; }	

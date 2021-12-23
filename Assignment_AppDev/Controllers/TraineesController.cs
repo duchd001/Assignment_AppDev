@@ -1,6 +1,9 @@
 ﻿using Assignment_AppDev.Models;
+using Assignment_AppDev.ViewModels;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -14,15 +17,32 @@ namespace Assingment_AppDev.Controllers
             _context = new ApplicationDbContext();
         }
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(string searchString)
         {
-            var trainees = _context.Trainees.ToList();
-            return View(trainees);
+            var trainee = _context.Trainees.Include(te => te.Trainees);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                trainee = trainee.Where(s => s.Trainees.UserName.Contains(searchString));
+                return View(trainee);
+            }
+
+            if (User.IsInRole("TrainingStaff"))
+            {
+                var viewTrainee = _context.Trainees.Include(a => a.Trainees).ToList();
+                return View(viewTrainee);
+            }
+            if (User.IsInRole("Trainee"))
+            {
+                var traineeId = User.Identity.GetUserId();
+                var traineeVM = _context.Trainees.Where(te => te.TraineeID == traineeId).ToList();
+                return View(traineeVM);
+            }
+            return View("Index");
         }
         [HttpGet]
         public ActionResult Details(int id)
         {
-            var trainee = _context.Trainees.SingleOrDefault(t => t.TraineeID == id);
+            var trainee = _context.Trainees.SingleOrDefault(t => t.Id == id);
             if (trainee == null)
             {
                 return HttpNotFound();
@@ -33,27 +53,51 @@ namespace Assingment_AppDev.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult Create(Trainee model)
-        {
-            var newTrainee = new Trainee()
+            //Get Account Trainee
+            var userInDb = (from r in _context.Roles where r.Name.Contains("Trainee") select r).FirstOrDefault();
+            var users = _context.Users.Where(x => x.Roles.Select(y => y.RoleId).Contains(userInDb.Id)).ToList();
+            var traineeUser = _context.Trainees.ToList();
+            var viewModel = new TraineeViewModel
             {
-                TraineeID = model.TraineeID,
-                Name = model.Name,
-                Email = model.Email,
+                Trainees = users,
+                Trainee = new Trainee()
             };
-
-            _context.Trainees.Add(newTrainee);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index");
+            return View(viewModel);
         }
+            [HttpPost]
+        public ActionResult Create(TraineeViewModel trainee)
+        {
+            var traineeinDb = (from te in _context.Roles where te.Name.Contains("Trainee") select te).FirstOrDefault();
+            var traineeUser = _context.Users.Where(u => u.Roles.Select(us => us.RoleId).Contains(traineeinDb.Id)).ToList();
+            if (ModelState.IsValid)
+            {
+
+                var checkTraineeExist = _context.Trainees.Include(t => t.Trainees).Where(t => t.Trainees.Id == trainee.Trainee.TraineeID);
+                //GET TraineeID 
+                if (checkTraineeExist.Count() > 0)  //list ID comparison, if count == 0. jump to else
+                                                    // if (checkTraineeExist.Any())
+                {
+                    ModelState.AddModelError("", "Trainee Already Exists.");
+                }
+                else
+                {
+                    _context.Trainees.Add(trainee.Trainee);
+                    _context.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            TraineeViewModel traineeUserView = new TraineeViewModel()
+            {
+                Trainees = traineeUser,
+                Trainee = trainee.Trainee
+            };
+            return View(traineeUserView);
+  
+    }
         [HttpGet]
         public ActionResult Delete(int id)
         {
-            var todo = _context.Trainees.SingleOrDefault(t => t.TraineeID == id);
+            var todo = _context.Trainees.SingleOrDefault(t => t.Id == id);
             if (todo == null)
             {
                 return HttpNotFound();
@@ -67,7 +111,7 @@ namespace Assingment_AppDev.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var trainee = _context.Trainees.SingleOrDefault(t => t.TraineeID == id);
+            var trainee = _context.Trainees.SingleOrDefault(t => t.Id == id);
             if (trainee == null)
             {
                 return HttpNotFound();
@@ -76,19 +120,20 @@ namespace Assingment_AppDev.Controllers
             return View(trainee);
         }
         [HttpPost]
-        public ActionResult Edit(Trainee model)
+        public ActionResult Edit(Trainee trainee)
         {
-            var traineeDb = _context.Trainees.SingleOrDefault(t => t.TraineeID == model.TraineeID);
-            if (traineeDb == null)
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var traineeInDb = _context.Trainees.SingleOrDefault(te => te.Id == trainee.Id);
+            if (traineeInDb == null)
             {
                 return HttpNotFound();
             }
-
-            traineeDb.TraineeID = model.TraineeID;
-            traineeDb.Name = model.Name;
-            traineeDb.Email = model.Email;
+            traineeInDb.Email = trainee.Email;
+            traineeInDb.Name = trainee.Name;
             _context.SaveChanges();
-
             return RedirectToAction("Index");
         }
 

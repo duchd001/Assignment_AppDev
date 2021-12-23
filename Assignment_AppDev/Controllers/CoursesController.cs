@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace Assignment_AppDev.Controllers
 {
+	[Authorize(Roles = "TrainingStaff")]
 	public class CoursesController : Controller
     {
         private ApplicationDbContext _context;

@@ -12,7 +12,7 @@ namespace Assignment_AppDev.Models
         public int Id { get; set; }
         [DisplayName("Trainee")]
         [Required]
-        public int TraineeID { get; set; }
+        public string TraineeID { get; set; }
 
         [DisplayName("Trainee Name")]
         public string Name { get; set; }

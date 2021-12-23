@@ -1,6 +1,9 @@
 ﻿using Assignment_AppDev.Models;
+using Assignment_AppDev.ViewModels;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -19,13 +22,23 @@ namespace ASM_AppDevDD.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var trainers = _context.Trainers.ToList();
-            return View(trainers);
+            if (User.IsInRole("TrainingStaff"))
+            {
+                var viewTrainer = _context.Trainers.Include(a => a.Trainers).ToList();
+                return View(viewTrainer);
+            }
+            if (User.IsInRole("Trainer"))
+            {
+                var trainerId = User.Identity.GetUserId();
+                var trainerVM = _context.Trainers.Where(te => te.TrainerID == trainerId).ToList();
+                return View(trainerVM);
+            }
+            return View("Index");
         }
         [HttpGet]
         public ActionResult Details(int id)
         {
-            var trainer = _context.Trainers.SingleOrDefault(t => t.TrainerID == id);
+            var trainer = _context.Trainers.SingleOrDefault(t => t.ID == id);
             if (trainer == null)
             {
                 return HttpNotFound();
@@ -34,31 +47,53 @@ namespace ASM_AppDevDD.Controllers
             return View(trainer);
         }
         [HttpGet]
+        [Authorize(Roles = "TrainingStaff")]
         public ActionResult Create()
         {
-            return View();
+            //Get Account Trainer
+            var userInDb = (from r in _context.Roles where r.Name.Contains("Trainer") select r).FirstOrDefault();
+            var users = _context.Users.Where(x => x.Roles.Select(y => y.RoleId).Contains(userInDb.Id)).ToList();
+            var trainerUser = _context.Trainers.ToList();
+
+            var viewModel = new TrainerViewModel
+            {
+                Trainers = users,
+                Trainer = new Trainer()
+            };
+            return View(viewModel);
         }
         [HttpPost]
-        public ActionResult Create(Trainer model)
+        [Authorize(Roles = "TrainingStaff")]
+        public ActionResult Create(TrainerViewModel trainer)
         {
-            var newTrainer = new Trainer()
+            var trainerinDb = (from te in _context.Roles where te.Name.Contains("Trainer") select te).FirstOrDefault();
+            var trainerUser = _context.Users.Where(u => u.Roles.Select(us => us.RoleId).Contains(trainerinDb.Id)).ToList();
+            if (ModelState.IsValid)
             {
-                TrainerID = model.TrainerID,
-                Name = model.Name,
-                Address = model.Address,
-                Phone = model.Phone,
-                Age = model.Age,
+
+                var checkTrainerExist = _context.Trainers.Include(t => t.Trainers).Where(t => t.Trainers.Id == trainer.Trainer.TrainerID);
+                if (checkTrainerExist.Count() > 0) //list ID comparison, if count == 0. jump to else
+                {
+                    ModelState.AddModelError("", "Trainer Already Exists.");
+                }
+                else
+                {
+                    _context.Trainers.Add(trainer.Trainer);
+                    _context.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            TrainerViewModel trainerView = new TrainerViewModel()
+            {
+                Trainers = trainerUser,
+                Trainer = trainer.Trainer
             };
-
-            _context.Trainers.Add(newTrainer);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index");
+            return View(trainerView);
         }
         [HttpGet]
         public ActionResult Delete(int id)
         {
-            var todo = _context.Trainers.SingleOrDefault(t => t.TrainerID == id);
+            var todo = _context.Trainers.SingleOrDefault(t => t.ID == id);
             if (todo == null)
             {
                 return HttpNotFound();
@@ -70,9 +105,10 @@ namespace ASM_AppDevDD.Controllers
             return RedirectToAction("Index");
         }
         [HttpGet]
+        [Authorize(Roles = "TrainingStaff, Trainer")]
         public ActionResult Edit(int id)
         {
-            var trainer = _context.Trainers.SingleOrDefault(t => t.TrainerID == id);
+            var trainer = _context.Trainers.SingleOrDefault(t => t.ID == id);
             if (trainer == null)
             {
                 return HttpNotFound();
@@ -81,6 +117,7 @@ namespace ASM_AppDevDD.Controllers
             return View(trainer);
         }
         [HttpPost]
+        [Authorize(Roles = "TrainingStaff, Trainer")]
         public ActionResult Edit(Trainer model)
         {
             var trainerDb = _context.Trainers.SingleOrDefault(t => t.TrainerID == model.TrainerID);
@@ -97,7 +134,5 @@ namespace ASM_AppDevDD.Controllers
 
             return RedirectToAction("Index");
         }
-
-
     }
 }

@@ -3,19 +3,54 @@ using Assignment_AppDev.Utils;
 using Assignment_AppDev.ViewModels;
 using System.Data.Entity.Migrations;
 using System.Linq;
+using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using System.Web;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace Assignment_AppDev.Controllers
 {
+	[Authorize(Roles ="TrainingStaff")]	
 	public class StaffsViewModelsController : Controller
 	{
-		ApplicationDbContext _context;
+		private ApplicationDbContext _context;
+		private ApplicationSignInManager _signInManager;
+		private ApplicationUserManager _userManager;
 		public StaffsViewModelsController()
 		{
 			_context = new ApplicationDbContext();
 		}
-        // GET: StaffViewModels
-        [Authorize(Roles = Role.TrainingStaff)]
+		public StaffsViewModelsController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+		{
+			UserManager = userManager;
+			SignInManager = signInManager;
+		}
+		public ApplicationSignInManager SignInManager
+		{
+			get
+			{
+				return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+			}
+			private set
+			{
+				_signInManager = value;
+			}
+		}
+
+		public ApplicationUserManager UserManager
+		{
+			get
+			{
+				return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+			}
+			private set
+			{
+				_userManager = value;
+			}
+		} //Get from AccountController
+		  // GET: StaffViewModels
 		public ActionResult Index()
 		{
 			var traineeRole = (from te in _context.Roles where te.Name.Contains("Trainee") select te).FirstOrDefault();
@@ -35,7 +70,6 @@ namespace Assignment_AppDev.Controllers
 		}
 
 		[HttpGet]
-		[Authorize(Roles = Role.TrainingStaff)]
 		public ActionResult Edit(string id)
 		{
 
@@ -48,7 +82,6 @@ namespace Assignment_AppDev.Controllers
 		}
 
 		[HttpPost]
-		[Authorize(Roles = Role.TrainingStaff)]
 		public ActionResult Edit(ApplicationUser user)
 		{
 			var userInDb = _context.Users.Find(user.Id);
@@ -72,8 +105,6 @@ namespace Assignment_AppDev.Controllers
 			return View(user);
 
 		}
-
-		[Authorize(Roles = Role.TrainingStaff)]
 		public ActionResult Delete(string id)
 		{
 			var userInDb = _context.Users.SingleOrDefault(p => p.Id == id);
@@ -86,6 +117,44 @@ namespace Assignment_AppDev.Controllers
 			_context.SaveChanges();
 
 			return RedirectToAction("Index");
+		}
+		[HttpGet]
+		public ActionResult CreateTraineeAccount()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> CreateTraineeAccount(RegisterViewModel model)
+		{
+			//Borrow from AccountController
+			if (ModelState.IsValid)
+			{
+				var traineeInf = new ApplicationUser
+				{
+					UserName = model.Email,
+					Email = model.Email,
+					PhoneNumber = model.PhoneNumber
+				};
+				var result = await UserManager.CreateAsync(traineeInf, model.Password);
+				if (result.Succeeded)
+				{
+					//Add to trainee role
+					await UserManager.AddToRoleAsync(traineeInf.Id, Role.Trainee);
+					return RedirectToAction("Index", "StaffsViewModels");
+				}
+				AddErrors(result);
+			}
+			return View(model);
+
+		}
+		private void AddErrors(IdentityResult result)
+		{
+			foreach (var error in result.Errors)
+			{
+				ModelState.AddModelError("", error);
+			}
 		}
 	}
 }

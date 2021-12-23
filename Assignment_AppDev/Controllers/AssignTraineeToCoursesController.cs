@@ -39,7 +39,7 @@ namespace Assignment_AppDev.Controllers
         }
         //GET: Trainee and Course
         [HttpGet]
-        [Authorize(Roles = Role.TrainingStaff)]
+        [Authorize(Roles = "TrainingStaff")]
         public ActionResult Create()
         {
             var traineeInDb = (from te in _context.Roles where te.Name.Contains("Trainee") select te).FirstOrDefault();
@@ -56,7 +56,7 @@ namespace Assignment_AppDev.Controllers
             return View(viewModel);
         }
         [HttpPost]
-        [Authorize(Roles = Role.TrainingStaff)]
+        [Authorize(Roles = "TrainingStaff")]
         public ActionResult Create(AssignTraineeToCourseViewModel assign)
         {
             var traineeInDb = (from te in _context.Roles where te.Name.Contains("Trainee") select te).FirstOrDefault();
@@ -90,7 +90,7 @@ namespace Assignment_AppDev.Controllers
             return View(traineecourseVM);
         }
         [HttpGet]
-        [Authorize(Roles = Role.TrainingStaff)]
+        [Authorize(Roles = "TrainingStaff")]
         public ActionResult Delete(int id)
         {
             var assignInDb = _context.AssignTraineeToCourses.SingleOrDefault(a => a.ID == id);
