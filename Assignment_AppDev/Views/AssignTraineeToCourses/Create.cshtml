@@ -11,12 +11,12 @@
 {
     <div class="form-group">
         @Html.LabelFor(tr => tr.AssignTraineeToCourse.TraineeID)
-        @Html.DropDownListFor(tr => tr.AssignTraineeToCourse.TraineeID, new SelectList(Model.Trainees, "ID", "Email"), "", new { @class = "form-control" })
+        @Html.DropDownListFor(tr => tr.AssignTraineeToCourse.TraineeID, new SelectList(Model.Trainees, "Id", "Email"), "", new { @class = "form-control" })
     </div>
 
     <div class="form-group">
         @Html.LabelFor(tr => tr.AssignTraineeToCourse.Course.Name)
-        @Html.DropDownListFor(tr => tr.AssignTraineeToCourse.CourseID, new SelectList(Model.Courses, "ID", "Name"), "", new { @class = "form-control" })
+        @Html.DropDownListFor(tr => tr.AssignTraineeToCourse.CourseID, new SelectList(Model.Courses, "Id", "Name"), "", new { @class = "form-control" })
 
     </div>
 

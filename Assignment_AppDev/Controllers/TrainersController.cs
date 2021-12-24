@@ -20,6 +20,7 @@ namespace ASM_AppDevDD.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "TrainingStaff, Trainer")]
         public ActionResult Index()
         {
             if (User.IsInRole("TrainingStaff"))
@@ -68,29 +69,26 @@ namespace ASM_AppDevDD.Controllers
         {
             var trainerinDb = (from te in _context.Roles where te.Name.Contains("Trainer") select te).FirstOrDefault();
             var trainerUser = _context.Users.Where(u => u.Roles.Select(us => us.RoleId).Contains(trainerinDb.Id)).ToList();
-            if (ModelState.IsValid)
+            try
             {
-
-                var checkTrainerExist = _context.Trainers.Include(t => t.Trainers).Where(t => t.Trainers.Id == trainer.Trainer.TrainerID);
-                if (checkTrainerExist.Count() > 0) //list ID comparison, if count == 0. jump to else
-                {
-                    ModelState.AddModelError("", "Trainer Already Exists.");
-                }
-                else
-                {
-                    _context.Trainers.Add(trainer.Trainer);
-                    _context.SaveChanges();
-                    return RedirectToAction("Index");
-                }
+                _context.Trainers.Add(trainer.Trainer);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
             }
-            TrainerViewModel trainerView = new TrainerViewModel()
+            catch
             {
-                Trainers = trainerUser,
-                Trainer = trainer.Trainer
-            };
-            return View(trainerView);
+                TrainerViewModel trainerUserView = new TrainerViewModel()
+                {
+                    Trainers = trainerUser,
+                    Trainer = trainer.Trainer
+                };
+
+                return View(trainerUserView);
+            }
+            
         }
         [HttpGet]
+        [Authorize(Roles = "TrainingStaff")]
         public ActionResult Delete(int id)
         {
             var todo = _context.Trainers.SingleOrDefault(t => t.ID == id);

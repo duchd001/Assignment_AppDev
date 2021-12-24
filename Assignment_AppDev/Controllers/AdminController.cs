@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace Assignment_AppDev.Controllers
 {
-    [Authorize(Roles = Role.Admin)]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         // GET: Admin
@@ -69,7 +69,7 @@ namespace Assignment_AppDev.Controllers
             {
                 var trainerInf = new ApplicationUser
                 {
-                    UserName = model.Email,
+                    UserName = model.UserName,
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber
                 };
@@ -98,7 +98,7 @@ namespace Assignment_AppDev.Controllers
             {
                 var staffInf = new ApplicationUser
                 {
-                    UserName = model.Email,
+                    UserName = model.UserName,
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber
                 };
@@ -240,7 +240,7 @@ namespace Assignment_AppDev.Controllers
             return RedirectToAction("ShowStaffsInfo");
         }
         [HttpGet]
-        [Authorize (Roles = Role.TrainingStaff)]
+        [Authorize (Roles ="TrainingStaff")]
         public ActionResult CreateTraineeAccount()
         {
             return View();
@@ -253,7 +253,7 @@ namespace Assignment_AppDev.Controllers
             {
                 var traineeInf = new ApplicationUser
                 {
-                    UserName = model.Email,
+                    UserName = model.UserName,
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber
                 };

@@ -14,13 +14,15 @@ namespace Assignment_AppDev.Models
 		[DisplayName("Trainer ID")]
 		[Required]
 		public string TrainerID { get; set; }
-
-		[DisplayName("Trainer Name")]
-		public int Age { get; set; }	
+		
+		[DisplayName(" Name")]
 		public string Name { get; set; }
-		public int Phone { get; set; }
+		
+		[DisplayName("Address")]
 		public string Address { get; set; }
-        public string Email { get; set; }
+		public int Age { get; set; }
+		public int Phone { get; set; }
+		
 		public ApplicationUser Trainers { get; set; }
 	}
 }

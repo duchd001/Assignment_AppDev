@@ -17,7 +17,7 @@ namespace Assignment_AppDev.Controllers
 		}
 
 		[HttpGet]
-		[Authorize(Roles = "TrainingStaff, Trainee")]
+		[Authorize(Roles = "TrainingStaff, Trainer")]
 		// GET: AssignTrainertoCourses
 		public ActionResult Index()
 		{

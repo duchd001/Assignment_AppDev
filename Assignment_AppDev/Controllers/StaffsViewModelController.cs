@@ -12,7 +12,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace Assignment_AppDev.Controllers
 {
-	[Authorize(Roles ="TrainingStaff")]	
+	
 	public class StaffsViewModelsController : Controller
 	{
 		private ApplicationDbContext _context;
@@ -51,6 +51,7 @@ namespace Assignment_AppDev.Controllers
 			}
 		} //Get from AccountController
 		  // GET: StaffViewModels
+		[Authorize(Roles = "TrainingStaff")]
 		public ActionResult Index()
 		{
 			var traineeRole = (from te in _context.Roles where te.Name.Contains("Trainee") select te).FirstOrDefault();
@@ -65,11 +66,22 @@ namespace Assignment_AppDev.Controllers
 				RoleName = "Trainee",
 				UserID = user.Id
 			}).ToList();
-            var staff = new StaffViewModel { Trainee = traineeUserVM, Trainer = traineeUserVM };
+			var trainerRole = (from t in _context.Roles where t.Name.Contains("Trainer") select t).FirstOrDefault();
+			var trainerUser = _context.Users.Where(u => u.Roles.Select(tnus => tnus.RoleId).Contains(trainerRole.Id)).ToList();
+			var trainerUserVM = trainerUser.Select(user => new StaffViewModel
+			{
+				UserName = user.UserName,
+				Email = user.Email,
+				RoleName = "Trainer",
+				UserID = user.Id
+			}).ToList();
+			var staff = new StaffViewModel { Trainee = traineeUserVM, Trainer = trainerUserVM };
 			return View(staff);
+
 		}
 
 		[HttpGet]
+		[Authorize(Roles = "TrainingStaff")]
 		public ActionResult Edit(string id)
 		{
 
@@ -82,6 +94,7 @@ namespace Assignment_AppDev.Controllers
 		}
 
 		[HttpPost]
+		[Authorize(Roles = "TrainingStaff")]
 		public ActionResult Edit(ApplicationUser user)
 		{
 			var userInDb = _context.Users.Find(user.Id);
@@ -105,20 +118,24 @@ namespace Assignment_AppDev.Controllers
 			return View(user);
 
 		}
-		public ActionResult Delete(string id)
-		{
-			var userInDb = _context.Users.SingleOrDefault(p => p.Id == id);
+		[Authorize(Roles = "TrainingStaff")]
+        public ActionResult Delete(string id)
 
-			if (userInDb == null)
-			{
-				return HttpNotFound();
-			}
-			_context.Users.Remove(userInDb);
-			_context.SaveChanges();
+        {
+            var userInDb = _context.Users.SingleOrDefault(p => p.Id == id);
 
-			return RedirectToAction("Index");
-		}
-		[HttpGet]
+            if (userInDb == null)
+            {
+                return HttpNotFound();
+            }
+            _context.Users.Remove(userInDb);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+		[Authorize(Roles = "TrainingStaff")]
 		public ActionResult CreateTraineeAccount()
 		{
 			return View();
@@ -126,6 +143,7 @@ namespace Assignment_AppDev.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[Authorize(Roles = "TrainingStaff")]
 		public async Task<ActionResult> CreateTraineeAccount(RegisterViewModel model)
 		{
 			//Borrow from AccountController
@@ -133,7 +151,7 @@ namespace Assignment_AppDev.Controllers
 			{
 				var traineeInf = new ApplicationUser
 				{
-					UserName = model.Email,
+					UserName = model.UserName,
 					Email = model.Email,
 					PhoneNumber = model.PhoneNumber
 				};

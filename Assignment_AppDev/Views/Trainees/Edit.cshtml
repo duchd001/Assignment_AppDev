@@ -22,7 +22,7 @@
 		@Html.EditorFor(t => t.Name, new { htmlAttributes = new { @class = "form-control" } })
 		@Html.ValidationMessageFor(t => t.Name)
 	</div>
-		<div class="form-group">
+	<div class="form-group">
 		@Html.LabelFor(p => p.TraineeID)
 		@Html.EditorFor(p => p.TraineeID, new { htmlAttributes = new { @class = "form-control" } })
 		@Html.ValidationMessageFor(p => p.TraineeID, "", new { @class = "text-danger" })
