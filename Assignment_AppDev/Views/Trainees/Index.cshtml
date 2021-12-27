@@ -21,21 +21,20 @@
     <table class="table">
         <tr>
 
-            @*<th>UserName</th>*@
             <th>Email</th>
             <th>FullName</th>
             <th>Edit</th>
             <th>Delete</th>
 
         </tr>
-        @foreach (var trainee in Model)
+        @foreach (var traineee in Model)
         {
             <tr>
-                @*<th>trainee.Trainees.UserName</th>*@
-                <th>@trainee.Email</th>
-                <th>@trainee.Name</th>
-                <th>@Html.ActionLink("Edit", "Edit", new { id = trainee.Id })</th>
-                <th>@Html.ActionLink("Delete", "Delete", new { id = trainee.Id })</th>
+
+                <th>@traineee.Email</th>
+                <th>@traineee.Name</th>
+                <th>@Html.ActionLink("Edit", "Edit", new { id = traineee.Id })</th>
+                <th>@Html.ActionLink("Delete", "Delete", new { id = traineee.Id })</th>
             </tr>
         }
     </table>
@@ -48,12 +47,12 @@
             <th>FullName</th>
             <th>Edit</th>
         </tr>
-        @foreach (var trainee in Model)
+        @foreach (var traineeee in Model)
         {
             <tr>
-                <th>@trainee.Email</th>
-                <th>@trainee.Name</th>
-                <th>@Html.ActionLink("Edit", "Edit", new { id = trainee.Id })</th>
+                <th>@traineeee.Email</th>
+                <th>@traineeee.Name</th>
+                <th>@Html.ActionLink("Edit", "Edit", new { id = traineeee.Id })</th>
             </tr>
         }
     </table>

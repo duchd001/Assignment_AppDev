@@ -1,4 +1,5 @@
 ﻿using Assignment_AppDev.Models;
+using Assignment_AppDev.Utils;
 using Assignment_AppDev.ViewModels;
 using Microsoft.AspNet.Identity;
 using System;
@@ -65,13 +66,13 @@ namespace ASM_AppDevDD.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "TrainingStaff")]
-        public ActionResult Create(TrainerViewModel trainer)
+        public ActionResult Create(TrainerViewModel trainerrr)
         {
             var trainerinDb = (from te in _context.Roles where te.Name.Contains("Trainer") select te).FirstOrDefault();
             var trainerUser = _context.Users.Where(u => u.Roles.Select(us => us.RoleId).Contains(trainerinDb.Id)).ToList();
             try
             {
-                _context.Trainers.Add(trainer.Trainer);
+                _context.Trainers.Add(trainerrr.Trainer);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -80,14 +81,40 @@ namespace ASM_AppDevDD.Controllers
                 TrainerViewModel trainerUserView = new TrainerViewModel()
                 {
                     Trainers = trainerUser,
-                    Trainer = trainer.Trainer
+                    Trainer = trainerrr.Trainer
                 };
 
                 return View(trainerUserView);
             }
-            
         }
-        [HttpGet]
+            //    var trainerinDb = (from te in _context.Roles where te.Name.Contains("Trainer") select te).FirstOrDefault();
+            //    var trainerUser = _context.Users.Where(u => u.Roles.Select(us => us.RoleId).Contains(trainerinDb.Id)).ToList();
+            //    if (ModelState.IsValid)
+            //    {
+
+            //        var checkTrainerExist = _context.Trainers.Include(t => t.Trainers).Where(t => t.Trainers.Id == trainerrr.Trainer.TrainerID);
+            //        if (checkTrainerExist.Count() > 0) //list ID comparison, if count == 0. jump to else
+            //        {
+            //            ModelState.AddModelError("", "Trainer Already Exists.");
+            //        }
+            //        else
+            //        {
+            //            _context.Trainers.Add(trainerrr.Trainer);
+            //            _context.SaveChanges();
+            //            return RedirectToAction("Index");
+            //        }
+            //    }
+            //    TrainerViewModel trainerUserView = new TrainerViewModel()
+            //    {
+            //        Trainers = trainerUser,
+            //        Trainer = trainerrr.Trainer
+            //    };
+            //    return View(trainerUserView);
+            //}
+
+
+
+            [HttpGet]
         [Authorize(Roles = "TrainingStaff")]
         public ActionResult Delete(int id)
         {
@@ -132,5 +159,6 @@ namespace ASM_AppDevDD.Controllers
 
             return RedirectToAction("Index");
         }
+       
     }
 }

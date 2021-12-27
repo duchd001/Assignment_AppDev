@@ -105,5 +105,14 @@ namespace Assignment_AppDev.Controllers
 			_context.SaveChanges();
 			return RedirectToAction("Index");
 		}
+		
+		[HttpGet]
+		public ActionResult ViewTrainee(int id) 
+		{
+
+			var newusers = _context.AssignTraineeToCourses.Where(u => u.Course.ID ==id).Select(u => u.Trainee).ToList();
+			return View(newusers);
+
+		}
 	}
 }

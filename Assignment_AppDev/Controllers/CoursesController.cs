@@ -46,20 +46,21 @@ namespace Assignment_AppDev.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult Create(CourseCategoryViewModel coursecate)
+		public ActionResult Create(CourseCategoryViewModel coursecatee)
 		{
 			if (ModelState.IsValid)
 			{
 				var check = _context.Courses.Include(c => c.Category)
-					.Where(c => c.Name == coursecate.Course.Name && c.CategoryID == coursecate.Course.CategoryID);
-				//GET NameCOurse and Category ID from VM
+					.Where(c => c.Name == coursecatee.Course.Name && c.CategoryID == coursecatee.Course.CategoryID);
+
+				//GET NameCourse and Category ID
 				if (check.Count() > 0) //list ID comparison, if count == 0. jump to else
 				{
-					ModelState.AddModelError("", "Course Already Exists.");
-				}
+                    ModelState.AddModelError("", "Course Already Exists.");
+                }
 				else
 				{
-					_context.Courses.Add(coursecate.Course);
+					_context.Courses.Add(coursecatee.Course);
 					_context.SaveChanges();
 					return RedirectToAction("Index");
 				}
@@ -67,7 +68,7 @@ namespace Assignment_AppDev.Controllers
 			var courseVM = new CourseCategoryViewModel()
 			{
 				Categories = _context.Categories.ToList(),
-				Course = coursecate.Course,
+				Course = coursecatee.Course,
 			};
 			return View(courseVM);
 		}

@@ -38,13 +38,15 @@
     <table class="table">
         <tr>
             <th>Course</th>
+            <th>Action</th>
         </tr>
 
         @foreach (var assign in Model)
         {
-            <tr>
-                <td>@assign.Course.Name</td>
-            </tr>
+    <tr>
+        <td>@assign.Course.Name</td>
+        <td>@Html.ActionLink("Show all trainees ", "ViewTrainee", new { id = @assign.Course.ID })</td>
+    </tr>
         }
     </table>
 }

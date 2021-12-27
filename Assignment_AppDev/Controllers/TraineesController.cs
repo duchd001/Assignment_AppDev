@@ -21,16 +21,16 @@ namespace Assingment_AppDev.Controllers
 
         public ActionResult Index(string searchString)
         {
-            var trainee = _context.Trainees.Include(te => te.Trainees);
+            var trainee = _context.Trainees.Include(te => te.TraineeUser);
             if (!String.IsNullOrEmpty(searchString))
             {
-                trainee = trainee.Where(s => s.Trainees.UserName.Contains(searchString));
+                trainee = trainee.Where(s => s.TraineeUser.UserName.Contains(searchString));
                 return View(trainee);
             }
 
             if (User.IsInRole("TrainingStaff"))
             {
-                var viewTrainee = _context.Trainees.Include(a => a.Trainees).ToList();
+                var viewTrainee = _context.Trainees.Include(a => a.TraineeUser).ToList();
                 return View(viewTrainee);
             }
             if (User.IsInRole("Trainee"))
@@ -69,13 +69,13 @@ namespace Assingment_AppDev.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "TrainingStaff")]
-        public ActionResult Create(TraineeViewModel Trainee)
+        public ActionResult Create(TraineeViewModel Traineeee)
         {
             var traineeinDb = (from te in _context.Roles where te.Name.Contains("Trainer") select te).FirstOrDefault();
             var traineeUser = _context.Users.Where(u => u.Roles.Select(us => us.RoleId).Contains(traineeinDb.Id)).ToList();
             try
             {
-                _context.Trainees.Add(Trainee.Trainee);
+                _context.Trainees.Add(Traineeee.Trainee);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -84,18 +84,19 @@ namespace Assingment_AppDev.Controllers
                 TraineeViewModel traineeUserView = new TraineeViewModel()
                 {
                     Trainees = traineeUser,
-                    Trainee = Trainee.Trainee
+                    Trainee = Traineeee.Trainee
                 };
-                
-return View(traineeUserView);
+
+                return View(traineeUserView);
             }
-           
+
+
             //var traineeinDb = (from te in _context.Roles where te.Name.Contains("Trainee") select te).FirstOrDefault();
             //var traineeUser = _context.Users.Where(u => u.Roles.Select(us => us.RoleId).Contains(traineeinDb.Id)).ToList();
             //if (ModelState.IsValid)
             //{
 
-            //    var checkTraineeExist = _context.Trainees.Include(t => t.Trainees).Where(t => t.Trainees.Id == Traineee.Trainee.TraineeID);
+            //    var checkTraineeExist = _context.Trainees.Include(t => t.TraineeUser).Where(t => t.TraineeUser.Id == Traineeee.Trainee.TraineeID);
             //    //GET TraineeID 
             //    if (checkTraineeExist.Count() > 0)  //list ID comparison, if count == 0. jump to else
             //    {
@@ -103,7 +104,7 @@ return View(traineeUserView);
             //    }
             //    else
             //    {
-            //        _context.Trainees.Add(Traineee.Trainee);
+            //        _context.Trainees.Add(Traineeee.Trainee);
             //        _context.SaveChanges();
             //        return RedirectToAction("Index");
             //    }
@@ -111,7 +112,7 @@ return View(traineeUserView);
             //TraineeViewModel traineeUserView = new TraineeViewModel()
             //{
             //    Trainees = traineeUser,
-            //    Trainee = Traineee.Trainee
+            //    Trainee = Traineeee.Trainee
             //};
             //return View(traineeUserView);
 
@@ -161,6 +162,6 @@ return View(traineeUserView);
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
-
+     
     }
 }

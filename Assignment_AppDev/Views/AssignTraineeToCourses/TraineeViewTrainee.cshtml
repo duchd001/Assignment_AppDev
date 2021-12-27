@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Assignment_AppDev.Models.ApplicationUser>
+@{
+    ViewBag.Title = "TraineeViewTrainee";
+}
+
+<h2>Trainee View Trainee</h2>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Email</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

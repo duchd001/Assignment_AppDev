@@ -53,19 +53,16 @@
 {
     <table class="table">
         <tr>
-            <th>Email</th>
             <th>FullName</th>
             <th>Age</th>
             <th>Phone</th>
             <th>Address</th>
             <th>Edit</th>
-            <th>Delete</th>
 
         </tr>
         @foreach (var trainer in Model)
         {
             <tr>
-                @*<th>@trainer.Trainers.Email</th>*@
                 <th>@trainer.Name</th>
                 <th>@trainer.Age</th>
                 <th>@trainer.Phone</th>
